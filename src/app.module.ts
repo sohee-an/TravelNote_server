@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import entities from './typeorm';
 import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
@@ -14,7 +15,7 @@ import { AuthModule } from './auth/auth.module';
       username: 'root',
       password: process.env.DATABASE_PASSWORD,
       database: 'travel',
-      entities: [],
+      entities,
       synchronize: true,
     }),
     AuthModule,
