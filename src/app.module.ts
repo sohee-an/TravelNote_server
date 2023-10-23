@@ -3,9 +3,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { User } from './users/user.entity';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { getMetadataArgsStorage } from 'typeorm';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -16,7 +16,8 @@ import { UsersModule } from './users/users.module';
       username: 'root',
       password: process.env.DATABASE_PASSWORD,
       database: 'travel',
-      entities: [User],
+      entities: getMetadataArgsStorage().tables.map((tbl) => tbl.target),
+      autoLoadEntities: true,
       synchronize: true,
     }),
     UsersModule,

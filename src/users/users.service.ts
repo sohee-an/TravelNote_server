@@ -1,45 +1,33 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
+import { Injectable } from '@nestjs/common';
 import { User } from './user.entity';
+import { UserRepository } from './user.repository';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectRepository(User) private repo: Repository<User>) {}
-  create(email: string, password: string) {
-    const user = this.repo.create({ email, password });
-    const dbuser = this.repo.findBy({ email });
-    if (dbuser) {
-      throw new Error('이미 사용중인 이메일입니다.');
-    }
-
-    return this.repo.save(user);
+  constructor(private readonly userRepository: UserRepository) {}
+  async create(email: string, password: string, nickname: string) {
+    const user = new User({ email, password, nickname });
+    return await this.userRepository.save(user);
   }
 
-  async findOne(id: any) {
-    return await this.repo.findOne({ where: { id: id } });
+  async findOne(id: number) {
+    return await this.userRepository.findOne(id);
   }
 
   find(email: string) {
-    return this.repo.findBy({ email });
+    return this.userRepository.findBy(email);
   }
 
   async update(id: number, attrs: Partial<User>) {
-    const user = await this.findOne(id);
+    const updateUser = await this.userRepository.update(id, attrs);
 
-    if (!user) {
-      throw new Error('유저를 찾을 수 없습니다.');
-    }
-    Object.assign(user, attrs);
-    return this.repo.save(user);
+    return updateUser;
   }
 
   /**삭제 */
-  async remove(id: number) {
-    const user = await this.findOne(id);
-    if (!user) {
-      throw new NotFoundException('유저를 찾을 수 없습니다.');
-    }
-    return this.repo.remove(user);
+  async delete(id: number) {
+    const removeUser = await this.userRepository.remove(id);
+
+    return removeUser;
   }
 }
