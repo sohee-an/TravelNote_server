@@ -2,12 +2,17 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
-import { AuthService } from 'src/auth/auth.service';
-import { User } from './user.entity';
+import { TypeOrmCustomModule } from 'src/lib/typeorm/typeorm-custom.module';
+import { UserRepository } from './user.repository';
 
+//  memo: 한 모듈에 컨트롤러, 서비스가 하나만 있는게좋다.
 @Module({
-  imports: [TypeOrmModule.forFeature([User])], //저장소 생성함
+  imports: [
+    TypeOrmModule.forFeature([]),
+    TypeOrmCustomModule.forCustomRepository([UserRepository]),
+  ], //저장소 생성함
   controllers: [UsersController],
-  providers: [UsersService, AuthService], // 서비스 추가함
+  providers: [UsersService], // 서비스 추가함 //
+  exports: [UsersService],
 })
 export class UsersModule {}

@@ -1,32 +1,33 @@
 import { CustomRepository } from 'src/lib/typeorm/custom.repository';
 import { CustomEntityRepository } from 'src/lib/typeorm/decorator';
 import { User } from './user.entity';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
+import { DeepPartial, EntityManager, EntityTarget, QueryRunner } from 'typeorm';
 import { NotFoundException } from '@nestjs/common';
 
 @CustomEntityRepository(User)
 export class UserRepository extends CustomRepository<User> {
-  constructor(@InjectRepository(User) private userRepo: Repository<User>) {
-    super(userRepo.target, userRepo.manager, userRepo.queryRunner);
+  constructor(
+    target: EntityTarget<User>,
+    manager: EntityManager,
+    queryRunner?: QueryRunner,
+  ) {
+    super(target, manager, queryRunner);
   }
 
-  create(email: string, password: string) {
-    const user = this.userRepo.create({ email, password });
-    const dbuser = this.userRepo.findBy({ email });
-    if (dbuser) {
-      throw new NotFoundException('이미 사용중인 이메일입니다.');
-    }
-
-    return this.userRepo.save(user);
+  async save(partial: DeepPartial<User>) {
+    return this.repository.save(partial);
   }
 
-  async findOne(id: any) {
-    return await this.userRepo.findOne({ where: { id: id } });
+  async findOne(id: number) {
+    return this.repository.findOne({ where: { id } });
   }
 
   find(email: string) {
-    return this.userRepo.findBy({ email });
+    return this.repository.findBy({ email });
+  }
+
+  findBy(email: string) {
+    return this.repository.findBy({ email });
   }
 
   async update(id: number, attrs: Partial<User>) {
@@ -36,7 +37,7 @@ export class UserRepository extends CustomRepository<User> {
       throw new NotFoundException('유저를 찾을 수 없습니다.');
     }
     Object.assign(user, attrs);
-    return this.userRepo.save(user);
+    return this.repository.save(user);
   }
 
   /**삭제 */
@@ -45,6 +46,6 @@ export class UserRepository extends CustomRepository<User> {
     if (!user) {
       throw new NotFoundException('유저를 찾을 수 없습니다.');
     }
-    return this.userRepo.remove(user);
+    return this.repository.remove(user);
   }
 }
