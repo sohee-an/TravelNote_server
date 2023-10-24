@@ -11,7 +11,7 @@ import {
   UseInterceptors,
   ParseIntPipe,
 } from '@nestjs/common';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdateUserDto } from './dtos/update-user.dto';
 import { SerializeInterceptor } from 'src/interceptors/serialize.interceptor';
 
 @Controller('users')
@@ -31,13 +31,13 @@ export class UsersController {
     return this.userService.find(email);
   }
 
-  @Delete('/:id')
-  deleteUser(@Param('id') id: string) {
-    return this.userService.delete(parseInt(id));
-  }
+  // @Delete('/:id')
+  // deleteUser(@Param('id') id: string) {
+  //   return this.userService.delete(parseInt(id));
+  // }
 
-  @Patch('/:id')
-  updateUser(@Param('id') id: string, @Body() body: UpdateUserDto) {
-    return this.userService.update(parseInt(id), body);
-  }
+  // @Patch('/:id')
+  // updateUser(@Param('id') id: string, @Body() body: UpdateUserDto) {
+  //   return this.userService.update(parseInt(id), body);
+  // }
 }
