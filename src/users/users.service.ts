@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { User } from './user.entity';
 import { UserRepository } from './user.repository';
+import { FindOneOptions } from 'typeorm';
 
 @Injectable()
 export class UsersService {
@@ -11,23 +12,29 @@ export class UsersService {
   }
 
   async findOne(id: number) {
-    return await this.userRepository.findOne(id);
+    const options: FindOneOptions<User> = { where: { id } };
+    return await this.userRepository.findOne(options);
+  }
+
+  async findOneEmail(email: string) {
+    const options: FindOneOptions<User> = { where: { email } };
+    return await this.userRepository.findOne(options);
   }
 
   find(email: string) {
     return this.userRepository.findBy(email);
   }
 
-  async update(id: number, attrs: Partial<User>) {
-    const updateUser = await this.userRepository.update(id, attrs);
+  // async update(id: number, attrs: Partial<User>) {
+  //   const updateUser = await this.userRepository.update(id, attrs);
 
-    return updateUser;
-  }
+  //   return updateUser;
+  // }
 
-  /**삭제 */
-  async delete(id: number) {
-    const removeUser = await this.userRepository.remove(id);
+  // /**삭제 */
+  // async delete(id: number) {
+  //   const removeUser = await this.userRepository.remove(id);
 
-    return removeUser;
-  }
+  //   return removeUser;
+  // }
 }
