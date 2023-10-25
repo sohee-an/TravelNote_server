@@ -69,4 +69,16 @@ export class AuthService {
 
     return patchUser;
   }
+
+  async delete(userId: number) {
+    const userExists = await this.userService.findOne(userId);
+
+    if (!userExists) {
+      throw new BadRequestException('회원가입을 해주세요.');
+    }
+
+    const deleteUser = await this.userService.delete(userId);
+
+    return deleteUser;
+  }
 }

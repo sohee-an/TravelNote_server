@@ -40,10 +40,10 @@ export class UsersService {
     return updateUser;
   }
 
-  // /**삭제 */
-  // async delete(id: number) {
-  //   const removeUser = await this.userRepository.remove(id);
+  /**삭제 */
+  async delete(id: number) {
+    const removeUser = await this.userRepository.delete(id);
 
-  //   return removeUser;
-  // }
+    return removeUser;
+  }
 }
