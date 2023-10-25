@@ -36,15 +36,11 @@ export class UserRepository extends CustomRepository<User> {
     return this.repository.findBy({ email });
   }
 
-  // async update(id: number, attrs: Partial<User>) {
-  //   const user = await this.findOne(id);
-
-  //   if (!user) {
-  //     throw new NotFoundException('유저를 찾을 수 없습니다.');
-  //   }
-  //   Object.assign(user, attrs);
-  //   return this.repository.save(user);
-  // }
+  async update(id: number, attrs: Partial<User>) {
+    const user = Object.assign({ id: id }, attrs);
+    console.log('attrs', attrs);
+    return this.repository.update(id, user);
+  }
 
   // /**삭제 */
   // async remove(id: number) {
