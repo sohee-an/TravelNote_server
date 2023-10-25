@@ -17,4 +17,8 @@ export class LoginResponseDto {
 
   @IsString()
   readonly access_token: string;
+
+  constructor(partial?: Partial<LoginResponseDto>) {
+    return Object.assign(this, partial);
+  }
 }

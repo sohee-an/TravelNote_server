@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { User } from './user.entity';
 import { UserRepository } from './user.repository';
 import { FindOneOptions } from 'typeorm';
@@ -25,11 +25,20 @@ export class UsersService {
     return this.userRepository.findBy(email);
   }
 
-  // async update(id: number, attrs: Partial<User>) {
-  //   const updateUser = await this.userRepository.update(id, attrs);
+  async update(id: number, attrs: Partial<User>) {
+    const options: FindOneOptions<User> = { where: { id } };
+    const userExists = await this.userRepository.findOne(options);
 
-  //   return updateUser;
-  // }
+    if (!userExists) {
+      throw new BadRequestException('회원가입을 해주세요.');
+    }
+
+    const patchUser = new User({ id: userExists.id, ...attrs });
+
+    const updateUser = await this.userRepository.save(patchUser);
+
+    return updateUser;
+  }
 
   // /**삭제 */
   // async delete(id: number) {

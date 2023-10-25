@@ -6,6 +6,8 @@ import { AuthValidator } from './authValidator.validateRegister';
 import { scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
 import { JwtService } from '@nestjs/jwt';
+import { User } from 'src/users/user.entity';
+import { FindOneOptions } from 'typeorm';
 
 const scrypt = promisify(_scrypt);
 @Injectable()
@@ -46,7 +48,25 @@ export class AuthService {
       userId: user.id,
     });
 
-    const loginUser = { ...user, access_token };
+    const loginUser = { user, access_token };
+
     return loginUser;
+  }
+
+  async update(userId: number, nickname: string, password: string) {
+    const userExists = await this.userService.findOne(userId);
+
+    if (!userExists) {
+      throw new BadRequestException('회원가입을 해주세요.');
+    }
+
+    const hashPassword = await this.passwordEncryptor.encrypt(password);
+
+    const patchUser = await this.userService.update(userId, {
+      password: hashPassword,
+      nickname,
+    });
+
+    return patchUser;
   }
 }
