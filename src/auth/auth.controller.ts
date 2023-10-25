@@ -48,7 +48,7 @@ export class AuthController {
   async update(
     @Body() body: RegisterRequestDto,
     @Headers('token') token: string,
-  ) {
+  ): Promise<RegisterResponseDto> {
     const { nickname, password } = body;
 
     try {
