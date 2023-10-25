@@ -7,6 +7,7 @@ import {
   EntityTarget,
   QueryRunner,
   FindOneOptions,
+  RemoveOptions,
 } from 'typeorm';
 import { NotFoundException } from '@nestjs/common';
 
@@ -38,16 +39,12 @@ export class UserRepository extends CustomRepository<User> {
 
   async update(id: number, attrs: Partial<User>) {
     const user = Object.assign({ id: id }, attrs);
-    console.log('attrs', attrs);
+
     return this.repository.update(id, user);
   }
 
-  // /**삭제 */
-  // async remove(id: number) {
-  //   const user = await this.findOne(id);
-  //   if (!user) {
-  //     throw new NotFoundException('유저를 찾을 수 없습니다.');
-  //   }
-  //   return this.repository.remove(user);
-  // }
+  /**삭제 */
+  async delete(options: number) {
+    return this.repository.delete(options);
+  }
 }

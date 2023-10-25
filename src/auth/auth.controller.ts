@@ -3,9 +3,12 @@ import {
   Controller,
   Post,
   Body,
+  Delete,
+  Param,
   Patch,
   UnauthorizedException,
   Headers,
+  BadRequestException,
 } from '@nestjs/common';
 import { RegisterRequestDto, RegisterResponseDto } from './dtos/register.dto';
 import { LoginRequestDto, LoginResponseDto } from './dtos/login.dto';
@@ -59,6 +62,18 @@ export class AuthController {
     } catch (error) {
       console.error('Token verification failed:', error);
       throw new UnauthorizedException('Invalid token');
+    }
+  }
+
+  @Delete('/:userId')
+  async delete(@Param('userId') userId: number) {
+    try {
+      const user = await this.authService.delete(userId);
+      if (user) {
+        return { result: 'success', message: '정상적으로 삭제되엇습니다.' };
+      }
+    } catch (error) {
+      console.error('Token verification failed:', error);
     }
   }
 }
