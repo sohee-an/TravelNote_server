@@ -13,6 +13,7 @@ import { UsersModule } from './users/users.module';
 import { getMetadataArgsStorage } from 'typeorm';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { AuthTokenMiddleware } from './auth/interceptor/current-user.interceptor';
+import { TripModule } from './trip/trip.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { AuthTokenMiddleware } from './auth/interceptor/current-user.interceptor
       synchronize: true,
     }),
     UsersModule,
+    TripModule,
     AuthModule,
   ],
   controllers: [AppController],

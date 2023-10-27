@@ -1,7 +1,6 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { User } from './user.entity';
 import { UserRepository } from './user.repository';
-import { FindOneOptions } from 'typeorm';
 
 @Injectable()
 export class UsersService {
