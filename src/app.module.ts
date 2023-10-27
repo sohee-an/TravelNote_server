@@ -1,4 +1,9 @@
-import { Module, ClassSerializerInterceptor } from '@nestjs/common';
+import {
+  Module,
+  ClassSerializerInterceptor,
+  MiddlewareConsumer,
+  RequestMethod,
+} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -7,8 +12,8 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { getMetadataArgsStorage } from 'typeorm';
 import { APP_INTERCEPTOR } from '@nestjs/core';
-import { JwtModule } from '@nestjs/jwt';
-import { jwtConstants } from './auth/constants';
+import { AuthTokenMiddleware } from './auth/interceptor/current-user.interceptor';
+
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -28,8 +33,14 @@ import { jwtConstants } from './auth/constants';
   ],
   controllers: [AppController],
   providers: [
-    { provide: APP_INTERCEPTOR, useClass: ClassSerializerInterceptor },
+    { provide: APP_INTERCEPTOR, useClass: ClassSerializerInterceptor }, //공통 인터셉터
     AppService,
   ],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(AuthTokenMiddleware)
+      .forRoutes({ path: '*', method: RequestMethod.ALL });
+  }
+}

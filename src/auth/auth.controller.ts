@@ -6,38 +6,44 @@ import {
   Delete,
   Param,
   Patch,
+  Get,
   UnauthorizedException,
   Headers,
+  UseGuards,
   BadRequestException,
 } from '@nestjs/common';
 import { RegisterRequestDto, RegisterResponseDto } from './dtos/register.dto';
 import { LoginRequestDto, LoginResponseDto } from './dtos/login.dto';
 import { JwtValidator } from './jwtValidator.validate';
+import { AuthGuard } from './guard/auth.guard';
+import { CurrentUser } from './decorator/current-user.decorator';
+import { UpdateUserRequestDto } from './dtos/update.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-
     private readonly jwtValidator: JwtValidator,
   ) {}
 
   @Post('/register')
   async register(
-    @Body() body: RegisterRequestDto,
+    @Body() { email, nickname, password }: RegisterRequestDto,
   ): Promise<RegisterResponseDto> {
-    const { email, password, nickname } = body;
-
-    const user = await this.authService.register(email, password, nickname);
+    const user = await this.authService.register({ email, password, nickname });
     return user;
+  }
+
+  @Get('/test')
+  async test(@CurrentUser() userId: number) {
+    throw new BadRequestException('회원가입을 해주세요.');
+    return userId;
   }
 
   @Post('/login')
   async login(@Body() body: LoginRequestDto): Promise<LoginResponseDto> {
-    const { user, access_token } = await this.authService.login(
-      body.email,
-      body.password,
-    );
+    const { user, access_token } =
+      await this.authService.authWithEmailAndPassword(body);
     const { nickname, email } = user;
     // dto로 반환
     return new LoginResponseDto({
@@ -47,15 +53,16 @@ export class AuthController {
     });
   }
 
+  @UseGuards(AuthGuard)
   @Patch('')
   async update(
-    @Body() body: RegisterRequestDto,
-    @Headers('token') token: string,
+    @Body() body: UpdateUserRequestDto,
+    @Headers('Token') token: string,
   ): Promise<RegisterResponseDto> {
     const { nickname, password } = body;
 
     try {
-      const userId = await this.jwtValidator.verify(token);
+      const userId = await this.jwtValidator.jwtVerify(token);
 
       const user = await this.authService.update(userId, nickname, password);
       return user;

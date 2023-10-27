@@ -5,8 +5,9 @@ import { PasswordEncryptor } from './password.encryptor';
 import { UsersModule } from 'src/users/users.module';
 import { AuthValidator } from './authValidator.validateRegister';
 import { JwtModule } from '@nestjs/jwt';
-import { jwtConstants } from './constants';
+import { jwtConstants } from './constants/jwt.const';
 import { JwtValidator } from './jwtValidator.validate';
+import { AuthTokenMiddleware } from './interceptor/current-user.interceptor';
 
 @Module({
   imports: [
@@ -18,6 +19,13 @@ import { JwtValidator } from './jwtValidator.validate';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, PasswordEncryptor, AuthValidator, JwtValidator],
+  providers: [
+    AuthTokenMiddleware,
+    AuthService,
+    PasswordEncryptor,
+    AuthValidator,
+    JwtValidator,
+  ],
+  exports: [JwtValidator],
 })
 export class AuthModule {}

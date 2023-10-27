@@ -1,13 +1,15 @@
-import { IsString } from 'class-validator';
+import { IsString, IsEmail } from 'class-validator';
+import { IsNicknameForm } from 'src/validators/nickname.validator';
+import { IsPasswordForm } from 'src/validators/password.validator';
 
 export class RegisterRequestDto {
-  @IsString()
+  @IsEmail({}, { message: '이메일 형식으로 입력해주세요' })
   readonly email: string;
 
-  @IsString()
+  @IsNicknameForm()
   readonly nickname: string;
 
-  @IsString()
+  @IsPasswordForm()
   readonly password: string;
 }
 
