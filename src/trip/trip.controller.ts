@@ -1,5 +1,8 @@
 import { CurrentUser } from 'src/auth/decorator/current-user.decorator';
-import { CreateTripRequestDto, CreateTripResponseDto } from './dtos/createTrip';
+import {
+  CreateTripRequestDto,
+  CreateTripResponseDto,
+} from './dtos/createTrip.dto';
 import { TripService } from './trip.service';
 import {
   Body,
@@ -14,6 +17,7 @@ import {
   UseInterceptors,
   ParseIntPipe,
 } from '@nestjs/common';
+import { UpdateTripRequestDto } from './dtos/updateTrip.dto';
 
 @Controller('trip')
 export class TripController {
@@ -42,8 +46,8 @@ export class TripController {
     return user;
   }
 
-  //   @Patch()
-  //   findUsers(@Param('id') id: number) {
-  //     return this.tripService.update(id);
-  //   }
+  @Patch('/:id')
+  findUsers(@Param('id') id: number, @Body() body: UpdateTripRequestDto) {
+    return this.tripService.update(id, body);
+  }
 }

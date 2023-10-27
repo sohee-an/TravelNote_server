@@ -40,19 +40,19 @@ export class TripService {
   //     return this.tripRepository.findBy(email);
   //   }
 
-  //   async update(id: number, attrs: Partial<Trip>) {
-  //     const userExists = await this.tripRepository.findOne({ where: { id } });
+  async update(id: number, attrs: Partial<Trip>) {
+    const userExists = await this.tripRepository.findOne(id);
 
-  //     if (!userExists) {
-  //       throw new BadRequestException('회원가입을 해주세요.');
-  //     }
+    if (!userExists) {
+      throw new BadRequestException('회원가입을 해주세요.');
+    }
 
-  //     const patchUser = new User({ id: userExists.id, ...attrs });
+    const TripInfo = new Trip({ id: userExists.id, ...attrs });
 
-  //     const updateUser = await this.tripRepository.save(patchUser);
+    const updateUser = await this.tripRepository.save(TripInfo);
 
-  //     return updateUser;
-  //   }
+    return updateUser;
+  }
 
   async delete(id: number) {
     const removeUser = await this.tripRepository.delete(id);
