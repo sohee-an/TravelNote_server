@@ -15,9 +15,9 @@ export class TripService {
     return await this.tripRepository.save(createTrip);
   }
 
-  //   async findOneById(id: number) {
-  //     return await this.tripRepository.findOne({ where: { id } });
-  //   }
+  async findOneById(id: number) {
+    return await this.tripRepository.findOne(id);
+  }
 
   //   async findOneByEmail(email: string) {
   //     return await this.tripRepository.findOne({ where: { email } });
