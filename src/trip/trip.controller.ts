@@ -28,15 +28,22 @@ export class TripController {
     return createTrip;
   }
 
-  @Get('/:id')
-  findUser(@Param('id', ParseIntPipe) id: number) {
-    const user = this.tripService.findOneById(id);
-    if (!user) throw new NotFoundException('유저를 찾을 수 없습니다.');
+  @Get('')
+  findTrips() {
+    const user = this.tripService.findAll();
+
     return user;
   }
 
-  //   @Get()
-  //   findUsers(@Query('email') email: string) {
-  //     return this.tripService.find(email);
+  @Get('/:id')
+  findOneTrip(@Param('id', ParseIntPipe) id: number) {
+    const user = this.tripService.findOneById(id);
+
+    return user;
+  }
+
+  //   @Patch()
+  //   findUsers(@Param('id') id: number) {
+  //     return this.tripService.update(id);
   //   }
 }

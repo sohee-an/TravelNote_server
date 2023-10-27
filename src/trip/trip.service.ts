@@ -1,4 +1,8 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { Trip } from './trip.entity';
 import { TripRepository } from './trip.repository';
 
@@ -14,9 +18,18 @@ export class TripService {
     const createTrip = new Trip({ title, description, imageUrls, userId });
     return await this.tripRepository.save(createTrip);
   }
+  async findAll() {
+    const findAllUsers = await this.tripRepository.findAll();
+    if (!findAllUsers) {
+      throw new NotFoundException('유저가 없습니다.');
+    }
+    return findAllUsers;
+  }
 
   async findOneById(id: number) {
-    return await this.tripRepository.findOne(id);
+    const user = await this.tripRepository.findOne(id);
+    if (!user) throw new NotFoundException('유저를 찾을 수 없습니다.');
+    return user;
   }
 
   //   async findOneByEmail(email: string) {
@@ -27,7 +40,7 @@ export class TripService {
   //     return this.tripRepository.findBy(email);
   //   }
 
-  //   async update(id: number, attrs: Partial<User>) {
+  //   async update(id: number, attrs: Partial<Trip>) {
   //     const userExists = await this.tripRepository.findOne({ where: { id } });
 
   //     if (!userExists) {
