@@ -1,7 +1,6 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { User } from './user.entity';
 import { UserRepository } from './user.repository';
-import { FindOneOptions } from 'typeorm';
 
 @Injectable()
 export class UsersService {
@@ -11,14 +10,12 @@ export class UsersService {
     return await this.userRepository.save(user);
   }
 
-  async findOne(id: number) {
-    const options: FindOneOptions<User> = { where: { id } };
-    return await this.userRepository.findOne(options);
+  async findOneById(id: number) {
+    return await this.userRepository.findOne({ where: { id } });
   }
 
-  async findOneEmail(email: string) {
-    const options: FindOneOptions<User> = { where: { email } };
-    return await this.userRepository.findOne(options);
+  async findOneByEmail(email: string) {
+    return await this.userRepository.findOne({ where: { email } });
   }
 
   find(email: string) {
@@ -26,8 +23,7 @@ export class UsersService {
   }
 
   async update(id: number, attrs: Partial<User>) {
-    const options: FindOneOptions<User> = { where: { id } };
-    const userExists = await this.userRepository.findOne(options);
+    const userExists = await this.userRepository.findOne({ where: { id } });
 
     if (!userExists) {
       throw new BadRequestException('회원가입을 해주세요.');
@@ -40,7 +36,6 @@ export class UsersService {
     return updateUser;
   }
 
-  /**삭제 */
   async delete(id: number) {
     const removeUser = await this.userRepository.delete(id);
 

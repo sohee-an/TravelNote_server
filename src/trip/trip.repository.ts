@@ -23,6 +23,9 @@ export class TripRepository extends CustomRepository<Trip> {
   async save(partial: DeepPartial<Trip>) {
     return this.repository.save(partial);
   }
+  async findAll() {
+    return this.repository.find();
+  }
 
   async findOne(id: number) {
     return await this.repository.findOne({ where: { id } });

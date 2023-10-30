@@ -11,17 +11,14 @@ import {
   UseInterceptors,
   ParseIntPipe,
 } from '@nestjs/common';
-import { UpdateUserDto } from './dtos/update-user.dto';
-import { SerializeInterceptor } from 'src/interceptors/serialize.interceptor';
 
 @Controller('users')
 export class UsersController {
   constructor(private userService: UsersService) {}
 
-  @UseInterceptors(SerializeInterceptor)
   @Get('/:id')
   findUser(@Param('id', ParseIntPipe) id: number) {
-    const user = this.userService.findOne(id);
+    const user = this.userService.findOneById(id);
     if (!user) throw new NotFoundException('유저를 찾을 수 없습니다.');
     return user;
   }
