@@ -47,7 +47,12 @@ export class TripController {
   }
 
   @Patch('/:id')
-  findUsers(@Param('id') id: number, @Body() body: UpdateTripRequestDto) {
+  patchTrip(@Param('id') id: number, @Body() body: UpdateTripRequestDto) {
     return this.tripService.update(id, body);
+  }
+
+  @Delete('/:id')
+  deleteTrip(@Param('id') id: number) {
+    return this.tripService.delete(id);
   }
 }
