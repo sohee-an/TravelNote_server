@@ -7,28 +7,52 @@ import {
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { getMetadataArgsStorage } from 'typeorm';
 import { APP_INTERCEPTOR } from '@nestjs/core';
-import { AuthTokenMiddleware } from './auth/interceptor/current-user.interceptor';
+import { AuthTokenMiddleware } from './middleware/AuthTokenMiddleware';
 import { TripModule } from './trip/trip.module';
+import {
+  DATABASE_HOST,
+  DATABASE_PASSWORD,
+  DATABASE_PORT,
+} from 'env-keys.const';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'travel-note-database.ci8kfq4isrht.ap-northeast-2.rds.amazonaws.com',
-      port: 3306,
-      username: 'root',
-      password: process.env.DATABASE_PASSWORD,
-      database: 'travel',
-      entities: getMetadataArgsStorage().tables.map((tbl) => tbl.target),
-      autoLoadEntities: true,
-      synchronize: true,
+    ConfigModule.forRoot({
+      envFilePath: `.env.${process.env.NODE_ENV}`,
+      isGlobal: true,
     }),
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => {
+        return {
+          type: 'mysql',
+          host: config.get<string>(DATABASE_HOST),
+          port: parseInt(config.get<string>(DATABASE_PORT)),
+          username: 'root',
+          password: config.get<string>(DATABASE_PASSWORD),
+          database: 'travel',
+          entities: getMetadataArgsStorage().tables.map((tbl) => tbl.target),
+          autoLoadEntities: true,
+          synchronize: true,
+        };
+      },
+    }),
+    // TypeOrmModule.forRoot({
+    //   type: 'mysql',
+    //   host: process.env.DATABASE_HOST,
+    //   port: 3306,
+    //   username: 'root',
+    //   password: process.env.DATABASE_PASSWORD,
+    //   database: 'travel',
+    //   entities: getMetadataArgsStorage().tables.map((tbl) => tbl.target),
+    //   autoLoadEntities: true,
+    //   synchronize: true,
+    // }),
     UsersModule,
     TripModule,
     AuthModule,

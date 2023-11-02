@@ -1,9 +1,10 @@
-import { UsersService } from './../../users/users.service';
+import { UsersService } from 'src/users/users.service';
 import { Injectable } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 
 import { NestMiddleware } from '@nestjs/common';
-import { JwtValidator } from '../jwtValidator.validate';
+import { JwtValidator } from 'src/auth/jwtValidator.validate';
+
 import to from 'await-to-js';
 
 @Injectable()
