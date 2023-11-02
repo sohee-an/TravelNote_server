@@ -9,7 +9,6 @@ import {
   FindOneOptions,
   RemoveOptions,
 } from 'typeorm';
-import { NotFoundException } from '@nestjs/common';
 
 @CustomEntityRepository(User)
 export class UserRepository extends CustomRepository<User> {

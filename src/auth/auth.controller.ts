@@ -53,10 +53,13 @@ export class AuthController {
     });
   }
 
+  //  언제 새로운 토큰을 줘야되는가 ..
   @UseGuards(AuthGuard)
   @Patch('')
   async update(
-    @Body() body: UpdateUserRequestDto,
+    @CurrentUser() userId: number,
+    @Body()
+    body: UpdateUserRequestDto,
     @Headers('Token') token: string,
   ): Promise<RegisterResponseDto> {
     const { nickname, password } = body;

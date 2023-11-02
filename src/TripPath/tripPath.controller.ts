@@ -1,6 +1,6 @@
 import { CurrentUser } from 'src/auth/decorator/current-user.decorator';
-import { CreateTripRequestDto } from './dtos/createTrip.dto';
-import { TripService } from './trip.service';
+import { CreateTripPathRequestDto } from './dtos/createTripPath.dto';
+import { TripPathService } from './tripPath.service';
 import {
   Body,
   Controller,
@@ -11,19 +11,19 @@ import {
   Post,
   ParseIntPipe,
 } from '@nestjs/common';
-import {
-  UpdateTripRequestDto,
-  UpdateTripResponseDto,
-} from './dtos/updateTrip.dto';
+// import {
+//   UpdateTripRequestDto,
+//   UpdateTripResponseDto,
+// } from './dtos/updateTrip.dto';
 
 @Controller('trip')
-export class TripController {
-  constructor(private tripService: TripService) {}
+export class TripPathController {
+  constructor(private tripService: TripPathService) {}
 
   @Post()
   async createTrip(
     @CurrentUser() userId: number,
-    @Body() body: CreateTripRequestDto,
+    @Body() body: CreateTripPathRequestDto,
   ) {
     const createTrip = await this.tripService.create(body, userId);
     return createTrip;
@@ -44,10 +44,7 @@ export class TripController {
   }
 
   @Patch('/:id')
-  patchTrip(
-    @Param('id') id: number,
-    @Body() body: UpdateTripRequestDto,
-  ): Promise<UpdateTripResponseDto> {
+  patchTrip(@Param('id') id: number, @Body() body) {
     return this.tripService.update(id, body);
   }
 

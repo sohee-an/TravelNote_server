@@ -7,7 +7,7 @@ import { AuthValidator } from './authValidator.validateRegister';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constants/jwt.const';
 import { JwtValidator } from './jwtValidator.validate';
-import { AuthTokenMiddleware } from './interceptor/current-user.interceptor';
+import { AuthTokenMiddleware } from 'src/middleware/AuthTokenMiddleware';
 
 @Module({
   imports: [

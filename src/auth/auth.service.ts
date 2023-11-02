@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { PasswordEncryptor } from './password.encryptor';
-import { AuthValidator } from './authValidator.validateRegister';
 
 import { scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
@@ -18,7 +17,7 @@ export class AuthService {
   constructor(
     private readonly userService: UsersService,
     private readonly passwordEncryptor: PasswordEncryptor,
-    private readonly authValidator: AuthValidator,
+
     private jwtService: JwtService,
   ) {}
   public async register(
