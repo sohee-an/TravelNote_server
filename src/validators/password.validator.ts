@@ -23,6 +23,9 @@ export class IsPasswordFormValidator implements ValidatorConstraintInterface {
   }
 
   defaultMessage(args: ValidationArguments) {
+    // const {value} = args
+    // if(value < 8) return ``
+
     return `비밀번호는 8글자 이상, 하나 이상의 문자, 하나 이상의 숫자가 포함되어야 합니다.`;
   }
 }

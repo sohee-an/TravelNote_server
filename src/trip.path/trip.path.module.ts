@@ -1,8 +1,8 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
-import { TripPathRepository } from './tripPath.repository';
-import { TripPathService } from './tripPath.service';
-import { TripPathController } from './tripPath.controller';
+import { TripPathRepository } from './trip.path.repository';
+import { TripPathService } from './trip.path.service';
+import { TripPathController } from './trip.path.controller';
 import { TypeOrmCustomModule } from 'src/lib/typeorm/typeorm-custom.module';
 
 @Module({
