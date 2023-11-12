@@ -15,6 +15,7 @@ import {
   UpdateTripRequestDto,
   UpdateTripResponseDto,
 } from './dtos/updateTrip.dto';
+import { CreateTripPathRequestDto } from 'src/trip.path/dtos/createTripPath.dto';
 
 @Controller('trip')
 export class TripController {
@@ -54,5 +55,36 @@ export class TripController {
   @Delete('/:id')
   deleteTrip(@Param('id') id: number) {
     return this.tripService.delete(id);
+  }
+
+  // tripPath
+  @Post('/tripPath')
+  async createTripPath(@Body() body: CreateTripPathRequestDto) {
+    const createTrip = await this.tripService.tripPathCreate(body);
+    return createTrip;
+  }
+
+  @Get('trip/:tripId')
+  findTripaths() {
+    const user = this.tripService.tripPathFindAll();
+
+    return user;
+  }
+
+  @Get('/:tripPathid')
+  findOneTripPath(@Param('id', ParseIntPipe) id: number) {
+    const user = this.tripService.tripPathFindOneById(id);
+
+    return user;
+  }
+
+  @Patch('trip/:tripPathid')
+  patchTripPath(@Param('id') id: number, @Body() body) {
+    return this.tripService.tripPathUpdate(id, body);
+  }
+
+  @Delete('trip/:tripPathid')
+  deleteTripPath(@Param('id') id: number) {
+    return this.tripService.tripPathDelete(id);
   }
 }

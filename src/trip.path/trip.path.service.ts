@@ -3,19 +3,16 @@ import {
   BadRequestException,
   NotFoundException,
 } from '@nestjs/common';
-import { TripPath } from './tripPath.entity';
-import { TripPathRepository } from './tripPath.repository';
+import { TripPath } from './trip.path.entity';
+import { TripPathRepository } from './trip.path.repository';
 
 @Injectable()
 export class TripPathService {
   constructor(private readonly tripRepository: TripPathRepository) {}
 
-  async create(
-    body: Pick<TripPath, 'title' | 'description' | 'imageUrls'>,
-    userId: number,
-  ) {
+  async create(body: Pick<TripPath, 'title' | 'description' | 'imageUrls'>) {
     const { title, description, imageUrls } = body;
-    const createTrip = new TripPath({ title, description, imageUrls, userId });
+    const createTrip = new TripPath({ title, description, imageUrls });
     return await this.tripRepository.save(createTrip);
   }
   async findAll() {

@@ -12,8 +12,9 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { getMetadataArgsStorage } from 'typeorm';
 import { APP_INTERCEPTOR } from '@nestjs/core';
-import { AuthTokenMiddleware } from './middleware/AuthTokenMiddleware';
+import { AuthTokenMiddleware } from './middleware/authToken.middleware';
 import { TripModule } from './trip/trip.module';
+
 import {
   DATABASE_HOST,
   DATABASE_PASSWORD,
@@ -24,8 +25,10 @@ import {
   imports: [
     ConfigModule.forRoot({
       envFilePath: `.env.${process.env.NODE_ENV}`,
+      ignoreEnvFile: process.env.NODE_ENV === 'production',
       isGlobal: true,
     }),
+    // TypeOrmModule.forRoot(),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
@@ -42,17 +45,7 @@ import {
         };
       },
     }),
-    // TypeOrmModule.forRoot({
-    //   type: 'mysql',
-    //   host: process.env.DATABASE_HOST,
-    //   port: 3306,
-    //   username: 'root',
-    //   password: process.env.DATABASE_PASSWORD,
-    //   database: 'travel',
-    //   entities: getMetadataArgsStorage().tables.map((tbl) => tbl.target),
-    //   autoLoadEntities: true,
-    //   synchronize: true,
-    // }),
+
     UsersModule,
     TripModule,
     AuthModule,

@@ -14,11 +14,11 @@ export class TripPath {
   id: number;
 
   @ManyToOne(() => Trip)
-  @JoinColumn({ name: 'id' })
-  tripId: number;
+  @JoinColumn()
+  trip: Trip;
 
   @Column()
-  userId: number;
+  tripId: number;
 
   @Column()
   title: string;
@@ -32,7 +32,7 @@ export class TripPath {
   @CreateDateColumn()
   createdAt: Date;
 
-  constructor(partials?: Partial<Trip>) {
+  constructor(partials?: Partial<TripPath>) {
     return Object.assign(this, partials);
   }
 }

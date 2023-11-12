@@ -1,6 +1,6 @@
 import { CustomRepository } from 'src/lib/typeorm/custom.repository';
 import { CustomEntityRepository } from 'src/lib/typeorm/decorator';
-import { TripPath } from './tripPath.entity';
+import { TripPath } from './trip.path.entity';
 import {
   EntityManager,
   EntityTarget,
