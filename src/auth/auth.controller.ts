@@ -30,6 +30,7 @@ export class AuthController {
   async register(
     @Body() { email, nickname, password }: RegisterRequestDto,
   ): Promise<RegisterResponseDto> {
+    console.log('email', email, nickname, password);
     const user = await this.authService.register({ email, password, nickname });
     return user;
   }

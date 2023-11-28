@@ -11,6 +11,12 @@ async function bootstrap() {
       transform: true,
     }),
   );
-  await app.listen(8000);
+  // app.enableCors({
+  //   origin: 'http://localhost:4000', // 사용하고자 하는 특정 출처
+  //   methods: 'GET,PUT,POST,DELETE',
+  //   allowedHeaders: 'Content-Type, Authorization',
+  // });
+  app.enableCors();
+  await app.listen(process.env.PORT || 5000);
 }
 bootstrap();
